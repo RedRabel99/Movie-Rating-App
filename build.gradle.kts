@@ -41,6 +41,7 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
+                //implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
             }
         }
         val commonTest by getting {
@@ -53,6 +54,8 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation("io.ktor:ktor-server-html-builder-jvm:2.0.2")
+                implementation("io.ktor:ktor-serialization-jackson:2.3.0")
+                //implementation("io.ktor:ktor-jackson:1.6.8")
                 implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.2")
                 implementation("io.ktor:ktor-serialization:$ktorVersion")
                 implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
@@ -70,6 +73,14 @@ kotlin {
                 // database
                 implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
                 implementation("org.xerial:sqlite-jdbc:3.36.0.3")
+
+                // https://mvnrepository.com/artifact/org.mindrot/jbcrypt
+                // password encryption
+                implementation("org.mindrot:jbcrypt:0.4")
+                //auth
+                implementation("io.ktor:ktor-server-auth:$ktorVersion")
+                implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")
+
             }
         }
         val jvmTest by getting
