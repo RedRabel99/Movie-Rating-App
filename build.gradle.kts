@@ -41,7 +41,6 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
-                //implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
             }
         }
         val commonTest by getting {
@@ -80,6 +79,7 @@ kotlin {
                 //auth
                 implementation("io.ktor:ktor-server-auth:$ktorVersion")
                 implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")
+
 
             }
         }

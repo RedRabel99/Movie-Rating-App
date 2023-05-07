@@ -2,6 +2,7 @@ package me.user.application.service
 
 import models.User
 
+
 interface UserService {
     suspend fun registerUser(params: CreateUserParams): User?
 
