@@ -1,5 +1,7 @@
-package me.user.application.service
+package me.user.application.data.service.auth
 
+import me.user.application.routes.auth.params.CreateLoginParams
+import me.user.application.routes.auth.params.CreateUserParams
 import models.User
 
 

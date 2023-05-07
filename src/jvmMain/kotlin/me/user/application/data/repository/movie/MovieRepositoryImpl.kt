@@ -1,7 +1,7 @@
-package me.user.application.repository
+package me.user.application.data.repository.movie
 
 import io.ktor.http.*
-import me.user.application.service.MoviesService
+import me.user.application.data.service.movie.MoviesService
 import me.user.application.utils.BaseResponse
 
 class MovieRepositoryImpl(

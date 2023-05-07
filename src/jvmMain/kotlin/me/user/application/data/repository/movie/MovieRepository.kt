@@ -1,4 +1,4 @@
-package me.user.application.repository
+package me.user.application.data.repository.movie
 
 import me.user.application.utils.BaseResponse
 

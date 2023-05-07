@@ -1,7 +1,7 @@
-package me.user.application.repository
+package me.user.application.data.repository.auth
 
-import me.user.application.service.CreateLoginParams
-import me.user.application.service.CreateUserParams
+import me.user.application.routes.auth.params.CreateLoginParams
+import me.user.application.routes.auth.params.CreateUserParams
 import me.user.application.utils.BaseResponse
 
 interface UserRepository {

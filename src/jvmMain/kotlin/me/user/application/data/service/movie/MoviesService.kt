@@ -1,4 +1,4 @@
-package me.user.application.service
+package me.user.application.data.service.movie
 
 import models.Genre
 import models.Movie

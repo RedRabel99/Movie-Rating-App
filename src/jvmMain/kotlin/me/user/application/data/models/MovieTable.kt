@@ -1,6 +1,5 @@
 package me.user.application.data.models
 
-import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.datetime
 

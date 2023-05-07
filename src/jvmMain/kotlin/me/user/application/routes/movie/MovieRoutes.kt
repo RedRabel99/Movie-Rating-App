@@ -1,10 +1,10 @@
-package me.user.application.routes
+package me.user.application.routes.movie
 
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import me.user.application.repository.MovieRepository
+import me.user.application.data.repository.movie.MovieRepository
 import models.Genre
 import models.Movie
 
