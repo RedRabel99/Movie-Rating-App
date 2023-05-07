@@ -9,7 +9,7 @@ data class Movie(
     val reviewCount: Int,
     val score: Float,
     val releaseDate: String,
-    val runtime: Int,
+    //val runtime: Int,
     val overview: String,
     val posterPath: String,
     val genres: List<Genre> = emptyList()

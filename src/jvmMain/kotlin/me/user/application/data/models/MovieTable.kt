@@ -10,7 +10,7 @@ object MovieTable: Table("movies") {
     val review_count = integer("review_count")
     val score = decimal("score", 5,2)
     val release_date = datetime("release_date")
-    val runtime = integer("runtime")
+    //val runtime = integer("runtime")
     val overview = text("overview")
     val poster_path = varchar("poster_path", 255)
 

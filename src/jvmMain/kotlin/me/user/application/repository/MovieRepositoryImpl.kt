@@ -26,4 +26,32 @@ class MovieRepositoryImpl(
             BaseResponse.ErrorResponse(message ="Something went wrong\n${e.message}", statusCode = HttpStatusCode.InternalServerError)
         }
     }
+
+    override suspend fun getGenresList(): BaseResponse<Any> {
+        return try {
+            val genresList = moviesService.getGenresList()
+            BaseResponse.SuccessResponse(data = genresList)
+        }catch (e: Exception){
+            BaseResponse.ErrorResponse(message ="Something went wrong", statusCode = HttpStatusCode.InternalServerError)
+        }
+    }
+
+    override suspend fun getMovieListByGenre(genreName: String): BaseResponse<Any> {
+        return try {
+            val movieList = moviesService.getMoviesByGenre(genreName)
+            BaseResponse.SuccessResponse(data = movieList)
+        }catch (e: Exception){
+            BaseResponse.ErrorResponse(message ="Something went wrong", statusCode = HttpStatusCode.InternalServerError)
+        }
+    }
+
+    override suspend fun getGenreById(id: Int): BaseResponse<Any> {
+        return try{
+            val genre = moviesService.getGenreById(id)
+            if (genre == null) BaseResponse.ErrorResponse(message = "Not found", statusCode = HttpStatusCode.NotFound)
+            else BaseResponse.SuccessResponse(data = genre)
+        } catch (e: Exception){
+            BaseResponse.ErrorResponse(message ="Something went wrong\n${e.message}", statusCode = HttpStatusCode.InternalServerError)
+        }
+    }
 }
