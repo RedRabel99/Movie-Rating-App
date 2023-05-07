@@ -1,6 +1,5 @@
 package me.user.application.data.models
 
-import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Table
 
 object GenresTable: Table("genres"){

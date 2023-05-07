@@ -1,15 +1,13 @@
-package me.user.application.service
+package me.user.application.data.service.movie
 
 
-import models.Movie
 import me.user.application.data.DatabaseFactory.dbQuery
 import me.user.application.data.models.GenresTable
 import me.user.application.data.models.MovieGenresTable
 import me.user.application.data.models.MovieTable
 import models.Genre
-import org.jetbrains.exposed.dao.id.EntityID
+import models.Movie
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 

@@ -1,14 +1,15 @@
-package me.user.application.service
+package me.user.application.data.service.auth
 
 import me.user.application.data.DatabaseFactory.dbQuery
 import me.user.application.data.models.UserTable
+import me.user.application.routes.auth.params.CreateLoginParams
+import me.user.application.routes.auth.params.CreateUserParams
 import me.user.application.security.hashPassword
 import me.user.application.security.isPasswordCorrect
 import models.User
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class UserServiceImpl : UserService {
