@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
-
 val kotlinVersion = "1.7.20-Beta"
 val serializationVersion = "1.3.3"
 val ktorVersion = "2.0.3"
@@ -83,7 +81,18 @@ kotlin {
 
             }
         }
-        val jvmTest by getting
+        val jvmTest by getting{
+            dependencies {
+                implementation("io.ktor:ktor-client-mock:$ktorVersion")
+                implementation("io.ktor:ktor-server-test-host:$ktorVersion")
+                implementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
+                implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+                implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+                implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+                implementation("com.h2database:h2:$h2_version")
+
+            }
+        }
         val jsMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react:18.2.0-pre.346")
@@ -113,4 +122,7 @@ tasks.named<Copy>("jvmProcessResources") {
 tasks.named<JavaExec>("run") {
     dependsOn(tasks.named<Jar>("jvmJar"))
     classpath(tasks.named<Jar>("jvmJar"))
+}
+dependencies {
+    testImplementation("org.testng:testng:7.1.0")
 }
