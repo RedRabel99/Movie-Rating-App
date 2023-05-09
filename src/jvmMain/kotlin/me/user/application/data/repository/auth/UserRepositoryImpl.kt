@@ -25,7 +25,7 @@ class UserRepositoryImpl(
 
     override suspend fun loginUser(params: CreateLoginParams): BaseResponse<Any>{
         val user = userService.loginUser(CreateLoginParams(params.email, params.password))
-        if (user == null) return BaseResponse.ErrorResponse("Invalid credentials", statusCode = HttpStatusCode.Forbidden)
+        if (user == null) return BaseResponse.ErrorResponse("Invalid credentials", statusCode = HttpStatusCode.Unauthorized)
         val token = JwtConfig.instance.createAccessToken(user.id)
         user.authToken = token
         return BaseResponse.SuccessResponse(data = user, message = "Hello ${user.username}")
