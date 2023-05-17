@@ -11,4 +11,5 @@ interface ReviewService {
     suspend fun createReview(params: CreateReviewParams): Review
     suspend fun updateReview(review: Review): Review
     suspend fun deleteReview(id: Int): Boolean
+    suspend fun updateMovieScore(movieId: Int, newScore: Int): Boolean
 }
