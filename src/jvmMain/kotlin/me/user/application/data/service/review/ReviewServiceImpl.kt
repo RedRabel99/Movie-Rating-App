@@ -1,5 +1,6 @@
 package me.user.application.data.service.review
 
+import io.ktor.server.plugins.*
 import me.user.application.data.DatabaseFactory.dbQuery
 import me.user.application.data.models.MovieTable
 import me.user.application.data.models.ReviewTable
@@ -77,13 +78,15 @@ class ReviewServiceImpl : ReviewService {
         return resultRowToReview(statement?.resultedValues?.get(0)) ?: throw Exception("Review not created")
     }
 
-    override suspend fun updateMovieScore(movieId: Int, score: Int): Boolean {
+    override suspend fun updateMovieScore(movieId: Int, score: Int, reviewCountChange: Int): Boolean {
         try {
             dbQuery {
                 MovieTable.select { MovieTable.id eq movieId }.singleOrNull()?.let { movie ->
-                    val newScore =
-                        (movie[MovieTable.score] * movie[MovieTable.review_count] + score) / (movie[MovieTable.review_count] + 1)
-                    val newReviewCount = movie[MovieTable.review_count] + 1
+                    val newReviewCount = movie[MovieTable.review_count] + reviewCountChange
+                    val newScore = if(newReviewCount == 0) {0.0f}
+                    else{
+                        (movie[MovieTable.score] * movie[MovieTable.review_count] + score) / newReviewCount
+                    }
                     MovieTable.update({ MovieTable.id eq movieId }) {
                         it[MovieTable.score] = newScore
                         it[MovieTable.review_count] = newReviewCount
@@ -109,16 +112,22 @@ class ReviewServiceImpl : ReviewService {
     }
 
     override suspend fun updateReview(review: Review): Review {
-        TODO("Not yet implemented")
+        dbQuery {
+            ReviewTable.update({ ReviewTable.id eq review.id }) {
+                it[ReviewTable.rating] = review.rating
+                it[ReviewTable.review] = review.review
+            }
+        }
+        return getReview(review.id) ?: throw NotFoundException("Review not found")
     }
 
     override suspend fun deleteReview(id: Int): Boolean {
-        return try {
-            dbQuery {
-                ReviewTable.deleteWhere { ReviewTable.id eq id }
-            }
+        val score = getReview(id) ?: throw NotFoundException("Review not found")
+
+        return if(dbQuery { ReviewTable.deleteWhere { ReviewTable.id eq id }} > 0){ // deleteWhere returns number of rows deleted
+            updateMovieScore(score.movieId, (-1 * score.rating), -1)
             true
-        } catch (e: Exception) {
+        } else {
             false
         }
     }
