@@ -78,17 +78,17 @@ class ReviewServiceImpl : ReviewService {
         return resultRowToReview(statement?.resultedValues?.get(0)) ?: throw Exception("Review not created")
     }
 
-    override suspend fun updateMovieScore(movieId: Int, score: Int, reviewCountChange: Int): Boolean {
+    override suspend fun updateMovieRating(movieId: Int, rating: Int, reviewCountChange: Int): Boolean {
         try {
             dbQuery {
                 MovieTable.select { MovieTable.id eq movieId }.singleOrNull()?.let { movie ->
                     val newReviewCount = movie[MovieTable.review_count] + reviewCountChange
-                    val newScore = if(newReviewCount == 0) {0.0f}
+                    val newRating = if(newReviewCount == 0) {0.0f}
                     else{
-                        (movie[MovieTable.score] * movie[MovieTable.review_count] + score) / newReviewCount
+                        (movie[MovieTable.rating] * movie[MovieTable.review_count] + rating) / newReviewCount
                     }
                     MovieTable.update({ MovieTable.id eq movieId }) {
-                        it[MovieTable.score] = newScore
+                        it[MovieTable.rating] = newRating
                         it[MovieTable.review_count] = newReviewCount
                     }
                 }
@@ -122,10 +122,10 @@ class ReviewServiceImpl : ReviewService {
     }
 
     override suspend fun deleteReview(id: Int): Boolean {
-        val score = getReview(id) ?: throw NotFoundException("Review not found")
+        val rating = getReview(id) ?: throw NotFoundException("Review not found")
 
         return if(dbQuery { ReviewTable.deleteWhere { ReviewTable.id eq id }} > 0){ // deleteWhere returns number of rows deleted
-            updateMovieScore(score.movieId, (-1 * score.rating), -1)
+            updateMovieRating(rating.movieId, (-1 * rating.rating), -1)
             true
         } else {
             false
