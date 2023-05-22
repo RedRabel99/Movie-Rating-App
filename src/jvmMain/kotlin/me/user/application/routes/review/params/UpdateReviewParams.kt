@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UpdateReviewParams(
     var id: Int,
-    val score: Int?,
+    val rating: Int?,
     val review: String?,
     var userId: Int,
 )
