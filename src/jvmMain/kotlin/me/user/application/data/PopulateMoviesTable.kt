@@ -6,7 +6,6 @@ import me.user.application.data.models.MovieGenresTable
 import me.user.application.data.models.MovieTable
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
-import java.math.BigDecimal
 import java.time.LocalDate
 
 fun populateTables(){
@@ -26,7 +25,7 @@ private fun insertMovies(jsonData: JsonElement) {
             it[MovieTable.overview] = overview ?: ""
             it[MovieTable.poster_path] = posterPath ?: ""
             it[MovieTable.release_date] = LocalDate.parse(releaseDate ?: "2020-01-01").atStartOfDay()
-            it[MovieTable.score] = BigDecimal(0.0)
+            it[MovieTable.rating] = 0.0f
             it[MovieTable.review_count] = 0
 
         }

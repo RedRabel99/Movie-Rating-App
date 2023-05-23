@@ -69,9 +69,11 @@ open class AuthTestBuilder private constructor() {
             runBlocking {
                 response = server.client.post("auth/login"){
                     contentType(ContentType.Application.Json)
-                    setBody(Json.encodeToString(CreateLoginParams.serializer(), CreateLoginParams(email, password)))
+                    setBody(Json.encodeToString(
+                        CreateLoginParams.serializer(),
+                        CreateLoginParams(email, password)))
                 }
-                json = Json.decodeFromString(JsonElement.serializer(), response.bodyAsText())
+               json = Json.decodeFromString(JsonElement.serializer(), response.bodyAsText())
             }
             return this
         }

@@ -6,6 +6,7 @@ import io.ktor.server.plugins.contentnegotiation.*
 import me.user.application.data.DatabaseFactory
 import me.user.application.routes.auth.authRoutes
 import me.user.application.routes.movie.movieRoutes
+import me.user.application.routes.review.reviewRoutes
 import me.user.application.utils.RepositoryProvider
 
 fun configureDatabase() {
@@ -18,7 +19,9 @@ fun Application.configureContentNegotiation() {
     }
 }
 
+
 fun Application.configureRouting(){
     movieRoutes(RepositoryProvider.provideMovieRepository())
     authRoutes(RepositoryProvider.provideAuthRepository())
+    reviewRoutes(RepositoryProvider.provideReviewRepository())
 }

@@ -1,10 +1,7 @@
 import io.ktor.server.application.*
 import me.user.application.config.configureContentNegotiation
 import me.user.application.config.configureRouting
-import me.user.application.data.models.GenresTable
-import me.user.application.data.models.MovieGenresTable
-import me.user.application.data.models.MovieTable
-import me.user.application.data.models.UserTable
+import me.user.application.data.models.*
 import me.user.application.routes.auth.params.CreateUserParams
 import me.user.application.security.configureSecurity
 import me.user.application.security.hashPassword
@@ -22,7 +19,9 @@ object TestDatabaseFactory {
             user = "",
             password = "")
         transaction{
-            SchemaUtils.create(MovieTable, GenresTable, MovieGenresTable, UserTable)
+            //drop all tables to make sure we start with a clean slate
+            SchemaUtils.drop(MovieTable, GenresTable, MovieGenresTable, UserTable, ReviewTable)
+            SchemaUtils.create(MovieTable, GenresTable, MovieGenresTable, UserTable, ReviewTable)
 
             UserTable.insert {
                 it[username] = initialUser.username
