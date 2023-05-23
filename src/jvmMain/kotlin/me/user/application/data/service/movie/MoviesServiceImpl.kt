@@ -98,7 +98,7 @@ class MoviesServiceImpl : MoviesService {
                 id = row[MovieTable.id],
                 title = row[MovieTable.title],
                 reviewCount = row[MovieTable.review_count],
-                score = row[MovieTable.score].toFloat(),
+                score = row[MovieTable.rating].toFloat(),
                 releaseDate = row[MovieTable.release_date].toString(),
                 //runtime = row[MovieTable.runtime],
                 overview = row[MovieTable.overview],

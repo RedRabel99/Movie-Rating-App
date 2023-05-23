@@ -7,5 +7,5 @@ data class UpdateReviewParams(
     var id: Int,
     val rating: Int?,
     val review: String?,
-    var userId: Int,
+    var userId: Int
 )

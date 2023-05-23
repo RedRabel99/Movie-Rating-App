@@ -52,7 +52,7 @@ class ReviewRepositoryImpl(
     override suspend fun createReview(params: CreateReviewParams): BaseResponse<Any> {
         return try {
             val result = reviewService.createReview(params)
-            reviewService.updateMovieScore(result.movieId, result.rating, 1)
+            reviewService.updateMovieRating(result.movieId, result.rating, 1)
             return BaseResponse.SuccessResponse(data = result, statusCode = HttpStatusCode.Created)
         }catch (e: Exception) {
             BaseResponse.ErrorResponse(message = e.message ?: "Error creating review")
@@ -70,10 +70,10 @@ class ReviewRepositoryImpl(
 
             val result = reviewService.updateReview(review.copy(
                 review = params.review?: review.review,
-                rating = params.score?: review.rating
+                rating = params.rating?: review.rating
             ))
             if(review.rating != result.rating) {
-                reviewService.updateMovieScore(review.movieId, (result.rating - review.rating), 0)
+                reviewService.updateMovieRating(review.movieId, (result.rating - review.rating), 0)
             }
             BaseResponse.SuccessResponse(data = result, statusCode = HttpStatusCode.OK)
         } catch (e: Exception) {

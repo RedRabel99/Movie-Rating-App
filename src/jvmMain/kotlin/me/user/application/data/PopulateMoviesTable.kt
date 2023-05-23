@@ -25,7 +25,7 @@ private fun insertMovies(jsonData: JsonElement) {
             it[MovieTable.overview] = overview ?: ""
             it[MovieTable.poster_path] = posterPath ?: ""
             it[MovieTable.release_date] = LocalDate.parse(releaseDate ?: "2020-01-01").atStartOfDay()
-            it[MovieTable.score] = 0.0f
+            it[MovieTable.rating] = 0.0f
             it[MovieTable.review_count] = 0
 
         }

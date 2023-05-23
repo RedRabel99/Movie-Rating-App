@@ -14,16 +14,17 @@ import kotlinx.serialization.json.jsonObject
 import me.user.application.data.DatabaseFactory.dbQuery
 import me.user.application.data.models.MovieTable
 import me.user.application.data.models.ReviewTable
-import me.user.application.data.models.UserTable
 import me.user.application.routes.auth.params.CreateLoginParams
 import me.user.application.routes.review.params.CreateReviewParams
 import models.Movie
 import models.Review
 import models.User
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.deleteAll
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.InsertStatement
+import org.jetbrains.exposed.sql.update
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -31,8 +32,10 @@ open class ReviewTestBuilder private constructor(){
     private lateinit var server: TestApplicationEngine
     private lateinit var response: HttpResponse
     private lateinit var json: JsonElement
-    private lateinit var bearerToken: String
-    private var movieId = 1
+    private var bearerToken = ""
+    private var addedMovieId = 1
+    private var initialUserId = 1
+    private var initialReviewId = 1
 
     companion object{
         fun given(): Given {
@@ -56,6 +59,25 @@ open class ReviewTestBuilder private constructor(){
             server.start(wait = false)
             return this
         }
+        fun thereIsReviewInDatabase(movieRating: Int): Given{
+            runBlocking {
+                dbQuery{
+                    val review = ReviewTable.insert {
+                        it[ReviewTable.rating] = movieRating
+                        it[ReviewTable.review] = "TestReview"
+                        it[ReviewTable.userId] = initialUserId
+                        it[ReviewTable.movieId] = addedMovieId
+                    }
+
+                    initialReviewId = review.resultedValues?.get(0)?.get(ReviewTable.id) as Int
+                    MovieTable.update({MovieTable.id eq addedMovieId}){
+                        it[MovieTable.review_count] = (MovieTable.review_count + 1)
+                        it[MovieTable.rating] = movieRating.toFloat()
+                    }
+                }
+            }
+            return this
+        }
 
         fun thereIsMovieInDatabase(): Given {
             runBlocking {
@@ -64,13 +86,13 @@ open class ReviewTestBuilder private constructor(){
                     MovieTable.insert {
                         it[MovieTable.title] = "TestMovie"
                         it[MovieTable.review_count] = 0
-                        it[MovieTable.score] = 0.0f
+                        it[MovieTable.rating] = 0.0f
                         it[MovieTable.release_date] = java.time.LocalDateTime.now()
                         it[MovieTable.overview] = "TestOverview"
                         it[MovieTable.poster_path] = "TestPosterPath"
                     }
                 }
-                movieId = statement.resultedValues?.get(0)?.let { resultRowToMovie(it) }?.id ?: 0
+                addedMovieId = statement.resultedValues?.get(0)?.let { resultRowToMovie(it) }?.id ?: 1
 
             }
 
@@ -96,6 +118,7 @@ open class ReviewTestBuilder private constructor(){
                 }
                 json = Json.decodeFromString(JsonElement.serializer(), response.bodyAsText())
                 bearerToken = fromResponseJsonToUser(json).authToken ?: ""
+                initialUserId = fromResponseJsonToUser(json).id
             }
 
                 return this
@@ -113,9 +136,8 @@ open class ReviewTestBuilder private constructor(){
                     id = row[MovieTable.id],
                     title = row[MovieTable.title],
                     reviewCount = row[MovieTable.review_count],
-                    score = row[MovieTable.score].toFloat(),
+                    score = row[MovieTable.rating].toFloat(),
                     releaseDate = row[MovieTable.release_date].toString(),
-                    //runtime = row[MovieTable.runtime],
                     overview = row[MovieTable.overview],
                     posterPath = row[MovieTable.poster_path]
 
@@ -138,7 +160,35 @@ open class ReviewTestBuilder private constructor(){
                     setBody(
                         Json.encodeToString(
                             CreateReviewParams.serializer(),
-                            CreateReviewParams(movieId, 1, score, review)))
+                            CreateReviewParams(addedMovieId, initialUserId, score, review)))
+                    bearerAuth(bearerToken)
+                }
+                json = Json.decodeFromString(JsonElement.serializer(), response.bodyAsText())
+            }
+            return this
+        }
+        fun updateRequestOnReviewIsSent(review: String, rating: Int): When {
+            runBlocking {
+                response = server.client.patch("reviews/${initialReviewId}"){
+                    contentType(ContentType.Application.Json)
+                    setBody(
+                        """
+                            {
+                                "review": "$review",
+                                "rating": $rating
+                            }
+                        """
+                    )
+                    bearerAuth(bearerToken)
+                }
+            }
+            return this
+        }
+
+
+        fun deleteRequestOnReviewIsSent(): When {
+            runBlocking {
+                response = server.client.delete("reviews/1"){
                     bearerAuth(bearerToken)
                 }
                 json = Json.decodeFromString(JsonElement.serializer(), response.bodyAsText())
@@ -157,16 +207,59 @@ open class ReviewTestBuilder private constructor(){
             return this
         }
 
+        fun responseStatusCodeIsUnauthorized(): Then {
+            assertEquals(HttpStatusCode.Unauthorized, response.status)
+            return this
+        }
+        fun responseStatusCodeIsNoContent(): Then {
+            assertEquals(HttpStatusCode.NoContent, response.status)
+            return this
+        }
+
+        fun responseStatusCodeIsOk(): Then {
+            assertEquals(HttpStatusCode.OK, response.status)
+            return this
+        }
+
+        fun reviewWasDeletedFromDatabase(): Then {
+            val review = runBlocking {
+                dbQuery {
+                    ReviewTable.select { ReviewTable.id eq 1 }.map {
+                        it[ReviewTable.id]
+                    }.firstOrNull()
+                }
+            }
+            assertEquals(null, review)
+            return this
+        }
+
         fun reviewMovieIdShouldBeCorrect(): Then {
             val responseMovieId = fromResponseJsonToReview().id
 
-            assertEquals(movieId, responseMovieId)
+            assertEquals(addedMovieId, responseMovieId)
             return this
         }
+
+        fun movieRatingShouldBeCorrect(correctRating: Float): Then {
+            val responseMovieRating = getMovieScore()
+
+            assertEquals(correctRating, responseMovieRating)
+            return this
+        }
+
         private fun fromResponseJsonToReview(): Review {
             val data = json.jsonObject["data"]
             assertNotNull(data)
             return Json.decodeFromJsonElement<Review>(data)
+        }
+        private fun getMovieScore(): Float {
+            return runBlocking {
+                dbQuery {
+                    MovieTable.select { MovieTable.id eq addedMovieId }.map {
+                        it[MovieTable.rating]
+                    }.first().toFloat()
+                }
+            }
         }
         fun finally(): Finally {
             return Finally()
@@ -176,15 +269,6 @@ open class ReviewTestBuilder private constructor(){
     inner class Finally{
         fun stopServer(){
             server.stop()
-            runBlocking{
-                dbQuery {
-                    ReviewTable.deleteAll()
-                    MovieTable.deleteAll()
-                    UserTable.deleteAll()
-
-                }
-            }
         }
     }
 }
-
