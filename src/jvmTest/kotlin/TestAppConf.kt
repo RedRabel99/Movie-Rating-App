@@ -19,6 +19,8 @@ object TestDatabaseFactory {
             user = "",
             password = "")
         transaction{
+            //drop all tables to make sure we start with a clean slate
+            SchemaUtils.drop(MovieTable, GenresTable, MovieGenresTable, UserTable, ReviewTable)
             SchemaUtils.create(MovieTable, GenresTable, MovieGenresTable, UserTable, ReviewTable)
 
             UserTable.insert {
