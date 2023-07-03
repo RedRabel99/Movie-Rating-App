@@ -1,11 +1,11 @@
 package me.user.application.data.repository.auth
 
+import BaseResponse
 import io.ktor.http.*
 import me.user.application.data.service.auth.UserService
 import me.user.application.routes.auth.params.CreateLoginParams
 import me.user.application.routes.auth.params.CreateUserParams
 import me.user.application.security.JwtConfig
-import me.user.application.utils.BaseResponse
 
 class UserRepositoryImpl(
     private val userService: UserService
@@ -23,7 +23,7 @@ class UserRepositoryImpl(
         return  BaseResponse.ErrorResponse(message = "Something went wrong.")
     }
 
-    override suspend fun loginUser(params: CreateLoginParams): BaseResponse<Any>{
+    override suspend fun loginUser(params: CreateLoginParams): BaseResponse<Any> {
         val user = userService.loginUser(CreateLoginParams(params.email, params.password))
         if (user == null) return BaseResponse.ErrorResponse("Invalid credentials", statusCode = HttpStatusCode.Unauthorized)
         val token = JwtConfig.instance.createAccessToken(user.id)
