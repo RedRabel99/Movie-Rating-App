@@ -25,7 +25,7 @@ fun Application.configureContentNegotiation() {
 
 fun Application.frontendRoutes() {
     routing {
-        route("/") {
+        route("/app") {
             get {
                 call.respondText(
                     this::class.java.classLoader.getResource("index.html")!!.readText(),
@@ -36,6 +36,7 @@ fun Application.frontendRoutes() {
 
         static("/") {
             resources("")
+
         }
     }
 }

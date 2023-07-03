@@ -4,10 +4,7 @@ import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.serialization.kotlinx.json.*
-import kotlinx.browser.document
 import models.Movie
-import react.create
-import react.dom.client.createRoot
 
 val jsonClient = HttpClient {
     install(ContentNegotiation){
@@ -41,9 +38,3 @@ suspend fun getMovieList(): List<Movie> {
 //        else -> emptyList()
 //    }
 //}
-
-
-fun main() {
-    val container = document.getElementById("root") ?: error("Couldn't find container!")
-    createRoot(container).render(App.create())
-}
