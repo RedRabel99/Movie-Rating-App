@@ -1,6 +1,5 @@
 package components
 
-import getMovieList
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import models.Movie
@@ -16,6 +15,7 @@ import react.dom.html.ReactHTML.ul
 import react.router.dom.NavLink
 import react.useEffectOnce
 import react.useState
+import services.getMovieList
 
 private val scope = MainScope()
 
