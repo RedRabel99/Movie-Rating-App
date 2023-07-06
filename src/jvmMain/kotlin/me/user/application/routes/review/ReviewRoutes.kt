@@ -88,7 +88,7 @@ fun Application.reviewRoutes(repository: ReviewRepository){
                 call.respond(status = result.statusCode, result)
             }
         }
-        route("/user"){
+        route("/users"){
             get("/{userId}/${Review.path}"){
                 val userId = call.parameters["userId"]?.toIntOrNull()
                 if (userId == null){

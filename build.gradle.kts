@@ -97,6 +97,7 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react:18.2.0-pre.346")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:18.2.0-pre.346")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-router-dom:6.3.0-pre.334")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-emotion:11.9.3-pre.346")
                 implementation("io.ktor:ktor-client-js:$ktorVersion")
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
@@ -104,6 +105,16 @@ kotlin {
                 implementation(project.dependencies.enforcedPlatform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:$kotlinWrappersVersion"))
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom")
+
+                // https://mvnrepository.com/artifact/org.jetbrains.kotlin-wrappers/kotlin-mui
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-mui:5.13.6-pre.585-compat")
+
+                // https://mvnrepository.com/artifact/org.jetbrains.kotlin-wrappers/kotlin-mui-icons
+//                implementation("org.jetbrains.kotlin-wrappers:kotlin-mui-icons:5.11.16-pre.584")
+//                // https://mvnrepository.com/artifact/org.jetbrains.kotlin-wrappers/kotlin-muix-data-grid
+//                implementation("org.jetbrains.kotlin-wrappers:kotlin-muix-data-grid:5.11.0-pre.339")
+
+
             }
         }
         val jsTest by getting

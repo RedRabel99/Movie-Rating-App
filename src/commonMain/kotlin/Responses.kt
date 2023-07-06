@@ -1,11 +1,12 @@
+
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class SyncResponse<T>(
-    val updateCount: Int,
-    val updatedValues: List<T>,
-    val errors: List<ResponseErrors>
+    val data: T?=null,
+    val statusCode: StatusCode,
+    val message: String?
 )
 
 @Serializable
-data class ResponseErrors(val code: ErrorCode, val message: String)
+data class StatusCode(val value: Int, val description: String)

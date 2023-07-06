@@ -4,7 +4,7 @@ import io.ktor.http.*
 import me.user.application.data.service.review.ReviewService
 import me.user.application.routes.review.params.CreateReviewParams
 import me.user.application.routes.review.params.UpdateReviewParams
-import me.user.application.utils.BaseResponse
+import BaseResponse
 
 class ReviewRepositoryImpl(
     private val reviewService: ReviewService

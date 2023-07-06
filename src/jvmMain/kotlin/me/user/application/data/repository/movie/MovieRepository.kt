@@ -1,6 +1,6 @@
 package me.user.application.data.repository.movie
 
-import me.user.application.utils.BaseResponse
+import BaseResponse
 
 interface MovieRepository {
     suspend fun getMovieList(): BaseResponse<Any>

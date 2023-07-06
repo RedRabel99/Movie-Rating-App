@@ -5,7 +5,7 @@ import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
-import me.user.application.utils.BaseResponse
+import BaseResponse
 
 fun Application.configureSecurity(){
     JwtConfig.initialize("movie-rating-app")
