@@ -1,8 +1,7 @@
 package components
 
-import csstype.AlignItems
-import csstype.Display
-import csstype.rem
+import csstype.*
+import emotion.react.css
 import models.Movie
 import mui.material.*
 import mui.material.styles.TypographyVariant
@@ -11,6 +10,7 @@ import mui.system.sx
 import react.FC
 import react.Props
 import react.dom.html.ReactHTML
+import react.router.dom.NavLink
 import utils.md
 import utils.xs
 import kotlin.math.round
@@ -87,6 +87,41 @@ val MovieBox = FC<MovieBoxProps> { props ->
                         Typography {
                             variant = TypographyVariant.body1
                             +props.movie.overview
+                        }
+                    }
+                    Grid{
+                        xs = 12
+                        Typography{
+                            variant = TypographyVariant.body1
+                            +"Genres:"
+                            Box{
+                                sx {
+                                    display = Display.flex
+                                    flexWrap = FlexWrap.wrap
+                                }
+                                Grid{
+                                    container = true
+                                    spacing = responsive(1)
+                                    props.movie.genres.forEach{genre ->
+                                        Grid{
+                                            item = true
+                                            xs = 4
+                                            md = 2
+                                            NavLink{
+                                                to = "/genres?genre=${genre.name}"
+                                                css {
+                                                    textDecoration = None.none
+                                                }
+                                                Typography{
+                                                    variant = TypographyVariant.body1
+                                                    +genre.name
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
                         }
                     }
                 }
