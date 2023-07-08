@@ -3,9 +3,9 @@ package me.user.application.data.repository.auth
 import BaseResponse
 import io.ktor.http.*
 import me.user.application.data.service.auth.UserService
-import me.user.application.routes.auth.params.CreateLoginParams
-import me.user.application.routes.auth.params.CreateUserParams
 import me.user.application.security.JwtConfig
+import params.CreateLoginParams
+import params.CreateUserParams
 
 class UserRepositoryImpl(
     private val userService: UserService

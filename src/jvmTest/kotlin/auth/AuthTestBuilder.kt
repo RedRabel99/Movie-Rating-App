@@ -11,8 +11,8 @@ import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.json.jsonObject
 import me.user.application.data.DatabaseFactory.dbQuery
 import me.user.application.data.models.UserTable
-import me.user.application.routes.auth.params.CreateLoginParams
-import me.user.application.routes.auth.params.CreateUserParams
+import params.CreateLoginParams
+import params.CreateUserParams
 import models.User
 import org.jetbrains.exposed.sql.deleteAll
 import kotlin.test.assertEquals
@@ -71,7 +71,8 @@ open class AuthTestBuilder private constructor() {
                     contentType(ContentType.Application.Json)
                     setBody(Json.encodeToString(
                         CreateLoginParams.serializer(),
-                        CreateLoginParams(email, password)))
+                        CreateLoginParams(email, password)
+                    ))
                 }
                json = Json.decodeFromString(JsonElement.serializer(), response.bodyAsText())
             }

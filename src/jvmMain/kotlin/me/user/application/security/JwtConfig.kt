@@ -20,7 +20,7 @@ class JwtConfig private constructor(secret: String){
         .withIssuer(ISSUER)
         .withAudience(AUDIENCE)
         .withClaim(CLAIM, id)
-        .withExpiresAt(Date(System.currentTimeMillis() + 5 * 60000))
+        .withExpiresAt(Date(System.currentTimeMillis() + 60 * 60000))
         .sign(algorithm)
 
     companion object{

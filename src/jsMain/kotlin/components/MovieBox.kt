@@ -108,7 +108,7 @@ val MovieBox = FC<MovieBoxProps> { props ->
                                             xs = 4
                                             md = 2
                                             NavLink{
-                                                to = "/genres?genre=${genre.name}"
+                                                to = "/?genre=${genre.name}"
                                                 css {
                                                     textDecoration = None.none
                                                 }
