@@ -1,10 +1,10 @@
-package me.user.application.routes.review.params
+package params
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class CreateReviewParams(
     val movieId: Int,
-    var userId: Int,
+    var userId: Int? = null,
     val rating: Int,
     val review: String
 )

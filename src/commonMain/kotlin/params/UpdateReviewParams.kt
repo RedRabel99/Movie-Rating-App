@@ -1,11 +1,11 @@
-package me.user.application.routes.review.params
+package params
 
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class UpdateReviewParams(
-    var id: Int,
+    var id: Int? = null,
     val rating: Int?,
     val review: String?,
-    var userId: Int
+    var userId: Int? = null
 )

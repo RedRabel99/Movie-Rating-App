@@ -52,7 +52,7 @@ val MovieBox = FC<MovieBoxProps> { props ->
                     Grid {
                         xs = 12
                         Typography {
-                            variant = TypographyVariant.h5
+                            variant = TypographyVariant.h4
                             +props.movie.title
                         }
                     }
