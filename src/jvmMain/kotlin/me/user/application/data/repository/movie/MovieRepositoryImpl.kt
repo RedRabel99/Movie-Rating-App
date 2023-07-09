@@ -1,8 +1,8 @@
 package me.user.application.data.repository.movie
 
+import BaseResponse
 import io.ktor.http.*
 import me.user.application.data.service.movie.MoviesService
-import me.user.application.utils.BaseResponse
 
 class MovieRepositoryImpl(
     private val moviesService: MoviesService

@@ -1,10 +1,10 @@
 package me.user.application.data.repository.review
 
+import BaseResponse
 import io.ktor.http.*
 import me.user.application.data.service.review.ReviewService
-import me.user.application.routes.review.params.CreateReviewParams
-import me.user.application.routes.review.params.UpdateReviewParams
-import me.user.application.utils.BaseResponse
+import params.CreateReviewParams
+import params.UpdateReviewParams
 
 class ReviewRepositoryImpl(
     private val reviewService: ReviewService
@@ -61,7 +61,7 @@ class ReviewRepositoryImpl(
 
     override suspend fun updateReview(params: UpdateReviewParams): BaseResponse<Any> {
         return try {
-            val review = reviewService.getReview(params.id)
+            val review = reviewService.getReview(params.id!!)
                 ?: return BaseResponse.ErrorResponse(message = "Review not found", statusCode = HttpStatusCode.NotFound)
 
             if (review.userId != params.userId) {
@@ -90,8 +90,8 @@ class ReviewRepositoryImpl(
                 return BaseResponse.ErrorResponse(message = "User not authorized to update review", statusCode = HttpStatusCode.Unauthorized)
             }
             val result = reviewService.deleteReview(id)
-            if (result) {
-                BaseResponse.SuccessResponse(statusCode = HttpStatusCode.NoContent)
+            if (result != null) {
+                BaseResponse.SuccessResponse(data = result, message = "Review deleted successfully",statusCode = HttpStatusCode.NoContent)
             } else {
                 BaseResponse.ErrorResponse(message = "Review not found", statusCode = HttpStatusCode.NotFound)
             }

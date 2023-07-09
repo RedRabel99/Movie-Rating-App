@@ -7,11 +7,11 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import me.user.application.data.repository.review.ReviewRepository
-import me.user.application.routes.review.params.CreateReviewParams
-import me.user.application.routes.review.params.UpdateReviewParams
 import me.user.application.security.UserIdPrincipalForUser
 import models.Movie
 import models.Review
+import params.CreateReviewParams
+import params.UpdateReviewParams
 
 fun Application.reviewRoutes(repository: ReviewRepository){
     routing {
@@ -88,7 +88,7 @@ fun Application.reviewRoutes(repository: ReviewRepository){
                 call.respond(status = result.statusCode, result)
             }
         }
-        route("/user"){
+        route("/users"){
             get("/{userId}/${Review.path}"){
                 val userId = call.parameters["userId"]?.toIntOrNull()
                 if (userId == null){

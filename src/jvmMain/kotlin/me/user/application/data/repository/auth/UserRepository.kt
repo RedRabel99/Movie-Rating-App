@@ -1,8 +1,8 @@
 package me.user.application.data.repository.auth
 
-import me.user.application.routes.auth.params.CreateLoginParams
-import me.user.application.routes.auth.params.CreateUserParams
-import me.user.application.utils.BaseResponse
+import params.CreateLoginParams
+import params.CreateUserParams
+import BaseResponse
 
 interface UserRepository {
     suspend fun registerUser(params: CreateUserParams): BaseResponse<Any>

@@ -2,8 +2,8 @@ package me.user.application.data.service.auth
 
 import me.user.application.data.DatabaseFactory.dbQuery
 import me.user.application.data.models.UserTable
-import me.user.application.routes.auth.params.CreateLoginParams
-import me.user.application.routes.auth.params.CreateUserParams
+import params.CreateLoginParams
+import params.CreateUserParams
 import me.user.application.security.hashPassword
 import me.user.application.security.isPasswordCorrect
 import models.User

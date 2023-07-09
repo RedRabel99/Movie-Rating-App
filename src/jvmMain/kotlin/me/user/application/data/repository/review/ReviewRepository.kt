@@ -1,8 +1,8 @@
 package me.user.application.data.repository.review
 
-import me.user.application.routes.review.params.CreateReviewParams
-import me.user.application.routes.review.params.UpdateReviewParams
-import me.user.application.utils.BaseResponse
+import BaseResponse
+import params.CreateReviewParams
+import params.UpdateReviewParams
 
 interface ReviewRepository {
     suspend fun getReviewList(): BaseResponse<Any>

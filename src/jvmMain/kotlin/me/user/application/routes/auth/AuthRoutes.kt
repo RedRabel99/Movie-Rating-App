@@ -5,8 +5,8 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import me.user.application.data.repository.auth.UserRepository
-import me.user.application.routes.auth.params.CreateLoginParams
-import me.user.application.routes.auth.params.CreateUserParams
+import params.CreateLoginParams
+import params.CreateUserParams
 import models.User
 
 fun Application.authRoutes(repository: UserRepository){

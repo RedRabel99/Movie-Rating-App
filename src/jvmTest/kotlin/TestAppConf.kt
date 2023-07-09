@@ -2,7 +2,7 @@ import io.ktor.server.application.*
 import me.user.application.config.configureContentNegotiation
 import me.user.application.config.configureRouting
 import me.user.application.data.models.*
-import me.user.application.routes.auth.params.CreateUserParams
+import params.CreateUserParams
 import me.user.application.security.configureSecurity
 import me.user.application.security.hashPassword
 import org.jetbrains.exposed.sql.Database

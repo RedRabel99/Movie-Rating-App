@@ -1,4 +1,4 @@
-package me.user.application.routes.auth.params
+package params
 
 import kotlinx.serialization.Serializable
 
