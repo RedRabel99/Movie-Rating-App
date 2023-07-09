@@ -4,11 +4,11 @@ import io.ktor.server.plugins.*
 import me.user.application.data.DatabaseFactory.dbQuery
 import me.user.application.data.models.MovieTable
 import me.user.application.data.models.ReviewTable
-import me.user.application.routes.review.params.CreateReviewParams
 import models.Review
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.InsertStatement
+import params.CreateReviewParams
 
 class ReviewServiceImpl : ReviewService {
     override suspend fun getReviewList(): List<Review> {
@@ -69,7 +69,7 @@ class ReviewServiceImpl : ReviewService {
         dbQuery {
             statement = ReviewTable.insert {
                 it[movieId] = params.movieId
-                it[userId] = params.userId
+                it[userId] = params.userId!!
                 it[rating] = params.rating
                 it[review] = params.review
             }
@@ -121,14 +121,14 @@ class ReviewServiceImpl : ReviewService {
         return getReview(review.id) ?: throw NotFoundException("Review not found")
     }
 
-    override suspend fun deleteReview(id: Int): Boolean {
+    override suspend fun deleteReview(id: Int): Review? {
         val rating = getReview(id) ?: throw NotFoundException("Review not found")
 
         return if(dbQuery { ReviewTable.deleteWhere { ReviewTable.id eq id }} > 0){ // deleteWhere returns number of rows deleted
             updateMovieRating(rating.movieId, (-1 * rating.rating), -1)
-            true
+            rating
         } else {
-            false
+            null
         }
     }
 }

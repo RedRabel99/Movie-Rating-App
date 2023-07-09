@@ -47,7 +47,8 @@ val AccountDrawer = FC<AccountDrawerProps>{props ->
                             }
                             Button {
                                 variant = ButtonVariant.contained
-                                onClick = {}
+                                href = "#/user/${userContext.user!!.id}/reviews"
+//                                onClick = {navigate("/user/${userContext.user!!.id}}/reviews")}
                                 +"Check your reviews"
                             }
                             Button {

@@ -14,7 +14,7 @@ import kotlinx.serialization.json.jsonObject
 import me.user.application.data.DatabaseFactory.dbQuery
 import me.user.application.data.models.MovieTable
 import me.user.application.data.models.ReviewTable
-import me.user.application.routes.review.params.CreateReviewParams
+import params.CreateReviewParams
 import models.Movie
 import models.Review
 import models.User
@@ -160,7 +160,8 @@ open class ReviewTestBuilder private constructor(){
                     setBody(
                         Json.encodeToString(
                             CreateReviewParams.serializer(),
-                            CreateReviewParams(addedMovieId, initialUserId, score, review)))
+                            CreateReviewParams(addedMovieId, initialUserId, score, review)
+                        ))
                     bearerAuth(bearerToken)
                 }
                 json = Json.decodeFromString(JsonElement.serializer(), response.bodyAsText())

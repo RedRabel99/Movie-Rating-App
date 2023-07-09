@@ -1,7 +1,7 @@
 
 import components.Header
 import components.MovieList
-import components.RegisterForm
+import components.UserReviews
 import context.UserProvider
 import csstype.vh
 import kotlinx.coroutines.MainScope
@@ -39,8 +39,8 @@ val App = FC<Props> {
                             element = createElement(MovieList)
                         }
                         Route {
-                            path = "/test"
-                            element = createElement(RegisterForm)
+                            path = "/user/:id/reviews"
+                            element = createElement(UserReviews)
                         }
                     }
                 }

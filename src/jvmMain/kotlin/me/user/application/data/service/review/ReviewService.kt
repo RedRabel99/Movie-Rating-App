@@ -1,7 +1,7 @@
 package me.user.application.data.service.review
 
-import me.user.application.routes.review.params.CreateReviewParams
 import models.Review
+import params.CreateReviewParams
 
 interface ReviewService {
     suspend fun getReviewList(): List<Review>
@@ -10,6 +10,6 @@ interface ReviewService {
     suspend fun getReview(id: Int): Review?
     suspend fun createReview(params: CreateReviewParams): Review
     suspend fun updateReview(review: Review): Review
-    suspend fun deleteReview(id: Int): Boolean
+    suspend fun deleteReview(id: Int): Review?
     suspend fun updateMovieRating(movieId: Int, rating: Int, reviewCountChange: Int): Boolean
 }

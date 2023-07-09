@@ -1,9 +1,6 @@
 package components
 
-import csstype.AlignItems
-import csstype.Display
-import csstype.None
-import csstype.px
+import csstype.*
 import emotion.react.css
 import models.Movie
 import mui.material.*
@@ -14,6 +11,8 @@ import react.Props
 import react.dom.html.ReactHTML
 import react.router.dom.NavLink
 import react.useState
+import kotlin.math.round
+
 
 external interface MovieTableProps: Props {
     var movieList: List<Movie>
@@ -28,28 +27,21 @@ val MovieTable = FC<MovieTableProps>{props ->
     var orderBy by useState("title") // Default order by
 
     fun sortMovieList() {
-        props.movieList = when (sortKey) {
-            "title" -> if (sortAscending) props.movieList.sortedBy { it.title } else props.movieList.sortedByDescending { it.title }
-            "score" -> if (sortAscending) props.movieList.sortedBy { it.score } else props.movieList.sortedByDescending { it.score }
-            "reviewCount" -> if (sortAscending) props.movieList.sortedBy { it.reviewCount } else props.movieList.sortedByDescending { it.reviewCount }
+        props.movieList = when (orderBy) {
+            "title" -> if (order == "asc") props.movieList.sortedBy { it.title } else props.movieList.sortedByDescending { it.title }
+            "score" -> if (order == "asc") props.movieList.sortedBy { it.score } else props.movieList.sortedByDescending { it.score }
+            "reviewCount" -> if (order == "asc") props.movieList.sortedBy { it.reviewCount } else props.movieList.sortedByDescending { it.reviewCount }
             else -> props.movieList
         }
     }
 
-//    fun handleChangePage(newPage: Int) {
-//        page = newPage
-//    }
-//
-//    fun handleChangeRowsPerPage(event: ChangeEvent<HTMLElement>) {
-//        val target = event.target as? HTMLElement
-//        val value = target?.asDynamic()?.value?.toIntOrNull()
-//
-//        if (value != null) {
-//            // Use the value as needed
-//            rowsPerPage = value
-//            page = 0
-//        }
-//    }
+    fun handleSortRequest(property: String) {
+        val isAscending = orderBy == property && order == "asc"
+        val newOrder = if (isAscending) "desc" else "asc"
+        order = newOrder
+        orderBy = property
+        sortMovieList()
+    }
 
     Box{
         TableContainer {
@@ -64,21 +56,42 @@ val MovieTable = FC<MovieTableProps>{props ->
                             }
                         }
                         TableCell {
-                            Typography {
-                                variant = TypographyVariant.h5
-                                +"Title"
+                            Button{
+                                onClick = { handleSortRequest("title") }
+                                sx{
+                                    fontWeight = FontWeight.bold
+                                }
+                                color = if (orderBy == "title") ButtonColor.primary else ButtonColor.secondary
+                                Typography {
+                                    variant = TypographyVariant.h5
+                                    +"Title"
+                                }
                             }
                         }
                         TableCell {
-                            Typography {
-                                variant = TypographyVariant.h5
-                                +"Score"
+                            Button{
+                                onClick = { handleSortRequest("score") }
+                                sx{
+                                    fontWeight = FontWeight.bold
+                                }
+                                color = if (orderBy == "score") ButtonColor.primary else ButtonColor.secondary
+                                Typography {
+                                    variant = TypographyVariant.h5
+                                    +"Score"
+                                }
                             }
                         }
                         TableCell {
-                            Typography {
-                                variant = TypographyVariant.h5
-                                +"Review Count"
+                            Button{
+                                onClick = { handleSortRequest("reviewCount") }
+                                sx{
+                                    fontWeight = FontWeight.bold
+                                }
+                                color = if (orderBy == "reviewCount") ButtonColor.primary else ButtonColor.secondary
+                                Typography {
+                                    variant = TypographyVariant.h5
+                                    +"Review Count"
+                                }
                             }
                         }
                     }
@@ -120,7 +133,7 @@ val MovieTable = FC<MovieTableProps>{props ->
                                         alignItems = AlignItems.center
                                     }
                                     Typography {
-                                        +"${item.score}"
+                                        +"${round(item.score * 100) / 100}"
                                     }
                                     Rating {
                                         name = "read-only"
@@ -142,36 +155,5 @@ val MovieTable = FC<MovieTableProps>{props ->
                 }
             }
         }
-        ReactHTML.select {
-            value = sortKey
-            onChange = { event ->
-                sortKey = (event.target).value
-                sortMovieList()
-            }
-            ReactHTML.option { +"title" }
-            ReactHTML.option { +"score" }
-            ReactHTML.option { +"reviewCount" }
-        }
-//        TablePagination{
-//            rowsPerPageOptions=arrayOf(5, 10, 25)
-//            component = div
-//            count = props.movieList.size
-//            this.rowsPerPage = rowsPerPage
-//            this.page = page
-//            onPageChange = {_, newPage -> handleChangePage(newPage.toInt())}
-//            onRowsPerPageChange = {event -> handleChangeRowsPerPage(event)}
-//        }
-        // Sorting order buttons
-//        ReactHTML.button {
-//            onClick = {
-//                sortAscending = !sortAscending
-//                sortMovieList()
-//            }
-//            if (sortAscending) {
-//                +"Sort Ascending"
-//            } else {
-//                +"Sort Descending"
-//            }
-//        }
     }
 }
